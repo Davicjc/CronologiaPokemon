@@ -1211,3 +1211,134 @@ body {
     transform: translate(-50%, -50%);
     transition: opacity 0.3s ease;
 }
+
+/* ========================================
+   SELETOR DE IDIOMA
+   ======================================== */
+
+.language-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.language-selector-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.language-selector-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--pokemon-yellow);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(255, 222, 0, 0.3);
+}
+
+.language-selector-current {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.language-selector-arrow {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.7);
+    transition: transform 0.3s ease;
+}
+
+.language-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: rgba(26, 26, 46, 0.98);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    min-width: 160px;
+}
+
+.language-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 18px;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.language-option:hover {
+    background: rgba(255, 222, 0, 0.15);
+    color: var(--pokemon-yellow);
+}
+
+.language-option:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ajuste para mobile */
+@media (max-width: 768px) {
+    .language-selector {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .language-selector-btn {
+        padding: 8px 12px;
+    }
+    
+    .language-selector-current {
+        font-size: 1.3rem;
+    }
+    
+    .language-dropdown {
+        min-width: 140px;
+    }
+    
+    .language-option {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .language-selector {
+        top: 8px;
+        right: 8px;
+    }
+    
+    .language-selector-btn {
+        padding: 6px 10px;
+    }
+    
+    .language-selector-arrow {
+        display: none;
+    }
+}

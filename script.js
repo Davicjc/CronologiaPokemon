@@ -3,12 +3,376 @@
 // ========================================
 
 document.addEventListener('DOMContentLoaded', () => {
+    initLanguageSystem();
     initParticles();
     initNavigation();
     initCursorGlow();
     initItemHoverEffects();
     initDisclaimerAutoHide();
 });
+
+// ========================================
+// SISTEMA DE IDIOMAS
+// ========================================
+
+function initLanguageSystem() {
+    // Inicializar seletor de idioma
+    initLanguageSelector();
+    
+    // Aplicar traduções iniciais
+    if (window.langManager) {
+        window.langManager.applyTranslations();
+        translateContentItems();
+    }
+}
+
+function initLanguageSelector() {
+    const selectorBtn = document.querySelector('.language-selector-btn');
+    const dropdown = document.querySelector('.language-dropdown');
+    const options = document.querySelectorAll('.language-option');
+    
+    if (!selectorBtn || !dropdown) return;
+    
+    // Toggle dropdown
+    selectorBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('show');
+    });
+    
+    // Selecionar idioma
+    options.forEach(option => {
+        option.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const lang = option.dataset.lang;
+            if (window.langManager) {
+                window.langManager.setLanguage(lang);
+                translateContentItems();
+            }
+            dropdown.classList.remove('show');
+        });
+    });
+    
+    // Fechar dropdown ao clicar fora
+    document.addEventListener('click', () => {
+        dropdown.classList.remove('show');
+    });
+    
+    // Atualizar flag atual
+    updateCurrentFlag();
+}
+
+function updateCurrentFlag() {
+    const current = document.querySelector('.language-selector-current');
+    if (current && window.langManager) {
+        const flags = {
+            'pt-BR': '🇧🇷',
+            'en-US': '🇺🇸',
+            'es-LA': '🇪🇸'
+        };
+        current.textContent = flags[window.langManager.currentLang] || '🇧🇷';
+    }
+}
+
+// Mapeamento de títulos para chaves de tradução
+const CONTENT_MAP = {
+    // Geração I
+    'Temporada 1: Liga Índigo': 's1_indigo',
+    'Season 1: Indigo League': 's1_indigo',
+    'Temporada 1: Liga Índigo': 's1_indigo',
+    'Filme 01: Mewtwo Contra-Ataca': 'm01_mewtwo',
+    'Movie 01: Mewtwo Strikes Back': 'm01_mewtwo',
+    'Película 01: Mewtwo Contraataca': 'm01_mewtwo',
+    'Temporada 2: Aventuras nas Ilhas Laranja': 's2_orange',
+    'Season 2: Adventures on the Orange Islands': 's2_orange',
+    'Temporada 2: Aventuras en las Islas Naranja': 's2_orange',
+    'Filme 02: O Poder de Um (Lugia)': 'm02_lugia',
+    'Movie 02: The Power of One': 'm02_lugia',
+    'Película 02: El Poder de Uno': 'm02_lugia',
+    
+    // Geração II
+    'Temporada 3: As Jornadas Johto': 's3_johto',
+    'Season 3: The Johto Journeys': 's3_johto',
+    'Temporada 3: Los Viajes Johto': 's3_johto',
+    'Filme 03: O Feitiço dos Unown': 'm03_unown',
+    'Movie 03: Spell of the Unown': 'm03_unown',
+    'Película 03: El Hechizo de los Unown': 'm03_unown',
+    'Temporada 4: Campeões da Liga Johto': 's4_champions',
+    'Season 4: Johto League Champions': 's4_champions',
+    'Temporada 4: Los Campeones de la Liga Johto': 's4_champions',
+    'Especial: Mewtwo Retorna': 'sp_mewtwo_returns',
+    'Special: Mewtwo Returns': 'sp_mewtwo_returns',
+    'Especial: Mewtwo Regresa': 'sp_mewtwo_returns',
+    'Filme 04: Celebi: A Voz da Floresta': 'm04_celebi',
+    'Movie 04: Celebi: Voice of the Forest': 'm04_celebi',
+    'Película 04: Celebi: La Voz del Bosque': 'm04_celebi',
+    'Temporada 5: Master Quest': 's5_master',
+    'Season 5: Master Quest': 's5_master',
+    'Filme 05: Heróis (Latios e Latias)': 'm05_heroes',
+    'Movie 05: Pokémon Heroes': 'm05_heroes',
+    'Película 05: Héroes Pokémon: Latios y Latias': 'm05_heroes',
+    
+    // Geração III
+    'Temporada 6: Advanced': 's6_advanced',
+    'Season 6: Advanced': 's6_advanced',
+    'Filme 06: Jirachi: Realizador de Desejos': 'm06_jirachi',
+    'Movie 06: Jirachi: Wish Maker': 'm06_jirachi',
+    'Película 06: Jirachi: Realizador de Deseos': 'm06_jirachi',
+    'Temporada 7: Advanced Challenge': 's7_challenge',
+    'Season 7: Advanced Challenge': 's7_challenge',
+    'Filme 07: Alma Gêmea (Destiny Deoxys)': 'm07_deoxys',
+    'Movie 07: Destiny Deoxys': 'm07_deoxys',
+    'Película 07: El Destino de Deoxys': 'm07_deoxys',
+    'Temporada 8: Advanced Battle': 's8_battle',
+    'Season 8: Advanced Battle': 's8_battle',
+    'Filme 08: Lucario e o Mistério de Mew': 'm08_lucario',
+    'Movie 08: Lucario and the Mystery of Mew': 'm08_lucario',
+    'Película 08: Lucario y el Misterio de Mew': 'm08_lucario',
+    'Temporada 9: Batalha da Fronteira': 's9_frontier',
+    'Season 9: Battle Frontier': 's9_frontier',
+    'Temporada 9: Frente de Batalla': 's9_frontier',
+    'Filme 09: Pokémon Ranger e o Templo do Mar': 'm09_ranger',
+    'Movie 09: Pokémon Ranger and the Temple of the Sea': 'm09_ranger',
+    'Película 09: Pokémon Ranger y el Templo del Mar': 'm09_ranger',
+    'Especial: O Mestre da Miragem': 'sp_mirage',
+    'Special: The Mastermind of Mirage Pokémon': 'sp_mirage',
+    'Especial: El Amo de los Pokémon Espejismo': 'sp_mirage',
+    'Pokémon Chronicles': 'note_chronicles',
+    
+    // Geração IV
+    'Temporada 10: Diamond & Pearl': 's10_dp',
+    'Season 10: Diamond and Pearl': 's10_dp',
+    'Filme 10: O Pesadelo de Darkrai': 'm10_darkrai',
+    'Movie 10: The Rise of Darkrai': 'm10_darkrai',
+    'Película 10: El Surgimiento de Darkrai': 'm10_darkrai',
+    'Temporada 11: DP Battle Dimension': 's11_dimension',
+    'Season 11: DP Battle Dimension': 's11_dimension',
+    'Temporada 11: DP Dimensión de Batalla': 's11_dimension',
+    'Filme 11: Giratina e o Guerreiro Celeste': 'm11_giratina',
+    'Movie 11: Giratina and the Sky Warrior': 'm11_giratina',
+    'Película 11: Giratina y el Guerrero Celestial': 'm11_giratina',
+    'Temporada 12: DP Galactic Battles': 's12_galactic',
+    'Season 12: DP Galactic Battles': 's12_galactic',
+    'Temporada 12: DP Batallas Galácticas': 's12_galactic',
+    'Filme 12: Arceus e a Joia da Vida': 'm12_arceus',
+    'Movie 12: Arceus and the Jewel of Life': 'm12_arceus',
+    'Película 12: Arceus y la Joya de la Vida': 'm12_arceus',
+    'Temporada 13: DP Vencedores da Liga Sinnoh': 's13_victors',
+    'Season 13: DP Sinnoh League Victors': 's13_victors',
+    'Temporada 13: DP Los Vencedores de la Liga Sinnoh': 's13_victors',
+    'Filme 13: Zoroark: Mestre das Ilusões': 'm13_zoroark',
+    'Movie 13: Zoroark: Master of Illusions': 'm13_zoroark',
+    'Película 13: Zoroark: El Maestro de Ilusiones': 'm13_zoroark',
+    
+    // Geração V
+    'Temporada 14: Black & White': 's14_bw',
+    'Season 14: Black & White': 's14_bw',
+    'Temporada 14: Negro y Blanco': 's14_bw',
+    'Filme 14: Victini e Zekrom / Victini e Reshiram': 'm14_victini',
+    'Movie 14: White—Victini and Zekrom / Black—Victini and Reshiram': 'm14_victini',
+    'Película 14: Victini y Zekrom / Victini y Reshiram': 'm14_victini',
+    'Temporada 15: BW Destinos Rivais': 's15_rivals',
+    'Season 15: BW Rival Destinies': 's15_rivals',
+    'Temporada 15: BW Destinos Rivales': 's15_rivals',
+    'Filme 15: Kyurem contra a Espada da Justiça': 'm15_kyurem',
+    'Movie 15: Kyurem vs. the Sword of Justice': 'm15_kyurem',
+    'Película 15: Kyurem contra la Espada de la Justicia': 'm15_kyurem',
+    'Temporada 16: BW Aventuras em Unova': 's16_unova',
+    'Season 16: BW Adventures in Unova and Beyond': 's16_unova',
+    'Temporada 16: BW Aventuras en Teselia y Más Allá': 's16_unova',
+    'Filme 16: Genesect e a Lenda Revelada': 'm16_genesect',
+    'Movie 16: Genesect and the Legend Awakened': 'm16_genesect',
+    'Película 16: Genesect y el Despertar de una Leyenda': 'm16_genesect',
+    
+    // Geração VI
+    'Temporada 17: XY': 's17_xy',
+    'Season 17: XY': 's17_xy',
+    'Especial: Mega Evolução - Ato I': 'sp_mega1',
+    'Special: Mega Evolution Special I': 'sp_mega1',
+    'Especial: Mega Evolución - Acto I': 'sp_mega1',
+    'Especial: Mega Evolução - Ato II': 'sp_mega2',
+    'Special: Mega Evolution Special II': 'sp_mega2',
+    'Especial: Mega Evolución - Acto II': 'sp_mega2',
+    'Especial: Mega Evolução - Ato III': 'sp_mega3',
+    'Special: Mega Evolution Special III': 'sp_mega3',
+    'Especial: Mega Evolución - Acto III': 'sp_mega3',
+    'Especial: Mega Evolução - Ato IV': 'sp_mega4',
+    'Special: Mega Evolution Special IV': 'sp_mega4',
+    'Especial: Mega Evolución - Acto IV': 'sp_mega4',
+    'Filme 17: Diancie e o Casulo da Destruição': 'm17_diancie',
+    'Movie 17: Diancie and the Cocoon of Destruction': 'm17_diancie',
+    'Película 17: Diancie y el Capullo de la Destrucción': 'm17_diancie',
+    'Temporada 18: XY Kalos Quest': 's18_kalos',
+    'Season 18: XY Kalos Quest': 's18_kalos',
+    'Temporada 18: XY Expediciones en Kalos': 's18_kalos',
+    'Filme 18: Hoopa e o Duelo Lendário': 'm18_hoopa',
+    'Movie 18: Hoopa and the Clash of Ages': 'm18_hoopa',
+    'Película 18: Hoopa y el Duelo Legendario': 'm18_hoopa',
+    'Temporada 19: XYZ': 's19_xyz',
+    'Season 19: XYZ': 's19_xyz',
+    'Filme 19: Volcanion e a Maravilha Mecânica': 'm19_volcanion',
+    'Movie 19: Volcanion and the Mechanical Marvel': 'm19_volcanion',
+    'Película 19: Volcanion y la Maravilla Mecánica': 'm19_volcanion',
+    
+    // Geração VII
+    'Temporada 20: Sun & Moon': 's20_sm',
+    'Season 20: Sun & Moon': 's20_sm',
+    'Temporada 20: Sol y Luna': 's20_sm',
+    'Temporada 21: Sun & Moon - Ultra Adventures': 's21_ultra_adv',
+    'Season 21: Sun & Moon—Ultra Adventures': 's21_ultra_adv',
+    'Temporada 21: Sol y Luna—Ultra Aventuras': 's21_ultra_adv',
+    'Temporada 22: Sun & Moon - Ultra Legends': 's22_ultra_leg',
+    'Season 22: Sun & Moon—Ultra Legends': 's22_ultra_leg',
+    'Temporada 22: Sol y Luna—Ultra Leyendas': 's22_ultra_leg',
+    
+    // Geração VIII
+    'Temporada 23: Jornadas (Journeys)': 's23_journeys',
+    'Season 23: Journeys': 's23_journeys',
+    'Temporada 23: Viajes Pokémon': 's23_journeys',
+    'Temporada 24: Jornadas de Mestre (Master Journeys)': 's24_master',
+    'Season 24: Master Journeys': 's24_master',
+    'Temporada 24: Viajes Maestros Pokémon': 's24_master',
+    'Temporada 25: Jornadas Supremas': 's25_ultimate',
+    'Season 25: Ultimate Journeys': 's25_ultimate',
+    'Temporada 25: Viajes Definitivos Pokémon': 's25_ultimate',
+    'Especial: As Crônicas de Arceus': 'sp_arceus_chronicles',
+    'Special: Pokémon: The Arceus Chronicles': 'sp_arceus_chronicles',
+    'Especial: Las Crónicas de Arceus': 'sp_arceus_chronicles',
+    'Especial: O Céu Azul Distante': 'sp_blue_sky',
+    'Special: Distant Blue Sky': 'sp_blue_sky',
+    'Especial: El Cielo Azul Distante': 'sp_blue_sky',
+    'Minissérie Final: A Caminho de Mestre Pokémon': 'final_master',
+    'Final Miniseries: Pokémon: To Be a Pokémon Master': 'final_master',
+    'Miniserie Final: Pokémon: Para Ser un Maestro Pokémon': 'final_master',
+    
+    // Geração IX
+    'Temporada 26: Horizontes Pokémon': 's26_horizons',
+    'Season 26: Pokémon Horizons: The Series': 's26_horizons',
+    'Temporada 26: Horizontes Pokémon': 's26_horizons',
+    'Temporada 27: O Brilho de Terapagos': 's27_terapagos',
+    'Season 27: The Shining of Terapagos': 's27_terapagos',
+    'Temporada 27: El Brillo de Terapagos': 's27_terapagos',
+    'Temporada 28: Estreia Terastal': 's28_terastal',
+    'Season 28: Terastal Debut': 's28_terastal',
+    'Temporada 28: Debut Teracristal': 's28_terastal',
+    'Temporada 29: Rayquaza Ascende': 's29_rayquaza',
+    'Season 29: Rayquaza Rising': 's29_rayquaza',
+    'Temporada 29: Rayquaza Asciende': 's29_rayquaza',
+    
+    // Extras - Baseados nos Jogos
+    'Pokémon Origins': 'ex_origins',
+    'Pokémon Generations': 'ex_generations',
+    'Pokémon Evolutions': 'ex_evolutions',
+    'Pokémon: Twilight Wings': 'ex_twilight',
+    'Pokémon: Alas del Crepúsculo': 'ex_twilight',
+    'Pokémon: Hisuian Snow': 'ex_hisuian',
+    'Pokémon: Nieves de Hisui': 'ex_hisuian',
+    'Pokémon: Paldean Winds': 'ex_paldean',
+    'Pokémon: Vientos de Paldea': 'ex_paldean',
+    
+    // Extras - Divertidos
+    'A Concierge Pokémon': 'ex_concierge',
+    'Pokémon Concierge': 'ex_concierge',
+    'Pokétoon': 'ex_poketoon',
+    'Pokémon: A Grande Aventura de Bidoof': 'ex_bidoof',
+    'Pokémon: Bidoof\'s Big Stand': 'ex_bidoof',
+    'Pokémon: La Gran Aventura de Bidoof': 'ex_bidoof',
+    'Pokémon: Rumo ao Pico': 'ex_peak',
+    'Pokémon: Path to the Peak': 'ex_peak',
+    'Pokémon: Camino a la Cima': 'ex_peak',
+    
+    // Extras - Universo Alternativo
+    'Filme 20: Eu Escolho Você!': 'm20_choose_you',
+    'Movie 20: I Choose You!': 'm20_choose_you',
+    'Película 20: ¡Yo Te Elijo!': 'm20_choose_you',
+    'Filme 21: O Poder de Todos': 'm21_power_us',
+    'Movie 21: The Power of Us': 'm21_power_us',
+    'Película 21: El Poder de Todos': 'm21_power_us',
+    'Filme 23: Segredos da Selva (Koko)': 'm23_secrets',
+    'Movie 23: Secrets of the Jungle': 'm23_secrets',
+    'Película 23: Los Secretos de la Selva': 'm23_secrets',
+    'Remake: Mewtwo Contra-Ataca - Evolução': 'remake_mewtwo',
+    'Remake: Mewtwo Strikes Back—Evolution': 'remake_mewtwo',
+    'Remake: Mewtwo Contraataca—Evolución': 'remake_mewtwo',
+    'Live Action: Detetive Pikachu': 'detective_pikachu',
+    'Live Action: Detective Pikachu': 'detective_pikachu'
+};
+
+function translateContentItems() {
+    if (!window.langManager) return;
+    
+    const lang = window.langManager.currentLang;
+    const translations = window.TRANSLATIONS[lang];
+    if (!translations) return;
+    
+    // Traduzir todos os títulos de conteúdo
+    document.querySelectorAll('.content-item h4').forEach(h4 => {
+        const currentText = h4.textContent.trim();
+        const key = findContentKey(currentText);
+        
+        if (key && translations.content[key]) {
+            h4.textContent = translations.content[key];
+        }
+    });
+    
+    // Traduzir badges
+    document.querySelectorAll('.item-badge').forEach(badge => {
+        const text = badge.textContent.trim();
+        const badgeMap = {
+            'TV': 'badgeTV',
+            'FILME': 'badgeMovie',
+            'MOVIE': 'badgeMovie',
+            'PELÍCULA': 'badgeMovie',
+            'ESPECIAL': 'badgeSpecial',
+            'SPECIAL': 'badgeSpecial',
+            'NOTA': 'badgeNote',
+            'NOTE': 'badgeNote',
+            'NOVO': 'badgeNew',
+            'NEW': 'badgeNew',
+            'NUEVO': 'badgeNew',
+            'FINAL': 'badgeFinal',
+            'FINALE': 'badgeFinal'
+        };
+        
+        const key = badgeMap[text];
+        if (key && translations.ui[key]) {
+            badge.textContent = translations.ui[key];
+        }
+    });
+    
+    // Traduzir texto "Episódios"
+    document.querySelectorAll('.episodes').forEach(ep => {
+        const text = ep.textContent;
+        if (text.includes('Episódios') || text.includes('Episodes') || text.includes('Episodios')) {
+            ep.textContent = text
+                .replace(/Episódios/g, translations.ui.episodes)
+                .replace(/Episodes/g, translations.ui.episodes)
+                .replace(/Episodios/g, translations.ui.episodes);
+        }
+    });
+    
+    // Atualizar flag do seletor
+    updateCurrentFlag();
+}
+
+function findContentKey(text) {
+    // Tentar encontrar a chave diretamente
+    if (CONTENT_MAP[text]) {
+        return CONTENT_MAP[text];
+    }
+    
+    // Tentar encontrar por correspondência parcial
+    for (const [title, key] of Object.entries(CONTENT_MAP)) {
+        // Comparar sem episódios
+        const cleanText = text.split(' (')[0].split(' - ')[0].trim();
+        const cleanTitle = title.split(' (')[0].split(' - ')[0].trim();
+        
+        if (cleanText === cleanTitle) {
+            return key;
+        }
+    }
+    
+    return null;
+}
 
 // ========================================
 // AUTO-HIDE DISCLAIMER BOX
@@ -23,9 +387,19 @@ function initDisclaimerAutoHide() {
     if (disclaimerBox && timerElement) {
         let countdown = 10;
         
+        // Função para obter o texto traduzido do timer
+        const getTimerText = (seconds) => {
+            if (window.langManager && window.TRANSLATIONS) {
+                const lang = window.langManager.currentLang;
+                const template = window.TRANSLATIONS[lang]?.ui?.disclaimerTimer || 'Sumindo em <strong>%s</strong>s';
+                return template.replace('%s', seconds);
+            }
+            return `Sumindo em <strong>${seconds}</strong>s`;
+        };
+        
         disclaimerInterval = setInterval(() => {
             countdown--;
-            timerElement.innerHTML = `Sumindo em <strong>${countdown}</strong>s`;
+            timerElement.innerHTML = getTimerText(countdown);
             
             if (countdown <= 0) {
                 clearInterval(disclaimerInterval);
@@ -509,7 +883,13 @@ function createConfetti() {
 document.addEventListener('DOMContentLoaded', () => {
     const subtitle = document.querySelector('.subtitle');
     if (subtitle) {
-        const text = subtitle.textContent;
+        // Obter texto traduzido
+        let text = subtitle.textContent;
+        if (window.langManager && window.TRANSLATIONS) {
+            const lang = window.langManager.currentLang;
+            text = window.TRANSLATIONS[lang]?.ui?.subtitle || text;
+        }
+        
         subtitle.textContent = '';
         subtitle.style.borderRight = '2px solid var(--pokemon-yellow)';
         

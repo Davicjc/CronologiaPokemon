@@ -218,8 +218,22 @@
     </script>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="translations.js"></script>
 </head>
 <body>
+    <!-- Seletor de Idioma -->
+    <div class="language-selector">
+        <button class="language-selector-btn" aria-label="Select Language">
+            <span class="language-selector-current">🇧🇷</span>
+            <span class="language-selector-arrow">▼</span>
+        </button>
+        <div class="language-dropdown">
+            <button class="language-option" data-lang="pt-BR">🇧🇷 Português</button>
+            <button class="language-option" data-lang="en-US">🇺🇸 English</button>
+            <button class="language-option" data-lang="es-LA">🇪🇸 Español</button>
+        </div>
+    </div>
+
     <!-- Fundo interativo com partículas -->
     <div id="particles-container"></div>
     
@@ -236,38 +250,38 @@
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu" class="pikachu-logo">
             <h1 class="title">
                 <span class="title-main"><span class="title-poke">Poké</span><span class="title-mon">mon</span></span>
-                <span class="subtitle">Ordem de Assistir</span>
+                <span class="subtitle" data-i18n="ui.subtitle">Ordem de Assistir</span>
             </h1>
         </div>
-        <p class="header-description">A ordem completa para maratonar toda a saga!</p>
+        <p class="header-description" data-i18n="ui.headerDescription">A ordem completa para maratonar toda a saga!</p>
         <div class="author-badge">
-            <span>📋 Lista sugerida por</span>
+            <span data-i18n="ui.listBy">📋 Lista sugerida por</span>
             <a href="https://davicjc.com" target="_blank" class="author-link"><strong>Davicjc</strong></a>
         </div>
         <div class="disclaimer-box" id="disclaimer-box">
-            <button class="disclaimer-close" onclick="closeDisclaimer()" title="Fechar">✕</button>
-            <p>🎮 <strong>Feito por fã, para fãs!</strong> Esta lista representa minha visão pessoal da ordem cronológica ideal para assistir Pokémon.</p>
-            <p>⚠️ Conteúdo sem fins lucrativos. Pokémon™ é marca registrada da Nintendo, The Pokémon Company e Game Freak.</p>
+            <button class="disclaimer-close" onclick="closeDisclaimer()" data-i18n-title="ui.close" title="Fechar">✕</button>
+            <p data-i18n="ui.disclaimerTitle">🎮 <strong>Feito por fã, para fãs!</strong> Esta lista representa minha visão pessoal da ordem cronológica ideal para assistir Pokémon.</p>
+            <p data-i18n="ui.disclaimerCopyright">⚠️ Conteúdo sem fins lucrativos. Pokémon™ é marca registrada da Nintendo, The Pokémon Company e Game Freak.</p>
             <span class="disclaimer-timer" id="disclaimer-timer">Sumindo em <strong>10</strong>s</span>
         </div>
         
         <button class="data-toggle" onclick="this.nextElementSibling.classList.toggle('expanded'); this.classList.toggle('active');">
-            💾 Seus dados <strong>Importante!</strong>
+            <span data-i18n="ui.dataToggle">💾 Seus dados <strong>Importante!</strong></span>
             <span class="toggle-icon">▼</span>
         </button>
         <div class="save-warning-box collapsed">
             <div class="save-warning-text">
                 <span class="warning-icon">⚠️</span>
                 <div>
-                    <p><strong>Seus dados são salvos apenas neste navegador!</strong></p>
-                    <p>Se trocar de navegador ou dispositivo, seu progresso não aparecerá. Use os botões abaixo para fazer backup.</p>
+                    <p data-i18n="ui.dataWarningTitle"><strong>Seus dados são salvos apenas neste navegador!</strong></p>
+                    <p data-i18n="ui.dataWarningText">Se trocar de navegador ou dispositivo, seu progresso não aparecerá. Use os botões abaixo para fazer backup.</p>
                 </div>
             </div>
             <div class="save-buttons">
-                <button class="save-btn export-btn" onclick="exportSave()">
+                <button class="save-btn export-btn" onclick="exportSave()" data-i18n="ui.exportBtn">
                     📤 Exportar
                 </button>
-                <button class="save-btn import-btn" onclick="document.getElementById('import-file').click()">
+                <button class="save-btn import-btn" onclick="document.getElementById('import-file').click()" data-i18n="ui.importBtn">
                     📥 Importar
                 </button>
                 <input type="file" id="import-file" accept=".json" style="display:none" onchange="importSave(event)">
@@ -279,15 +293,15 @@
     <nav class="generation-nav">
         <button class="nav-btn active" data-gen="all">
             <span class="nav-icon">🌟</span>
-            <span>Todos</span>
+            <span data-i18n="ui.navAll">Todos</span>
         </button>
         <button class="nav-btn" data-gen="ash">
             <span class="nav-icon">🧢</span>
-            <span>Saga Ash</span>
+            <span data-i18n="ui.navAsh">Saga Ash</span>
         </button>
         <button class="nav-btn" data-gen="horizontes">
             <span class="nav-icon">🧭</span>
-            <span>Horizontes</span>
+            <span data-i18n="ui.navHorizons">Horizontes</span>
         </button>
     </nav>
 
@@ -297,8 +311,8 @@
         <!-- SAGA ASH -->
         <section class="saga-section" data-saga="ash">
             <div class="saga-header">
-                <h2 class="saga-title">🧢 A Saga de Ash Ketchum</h2>
-                <span class="saga-years">1997 – 2023</span>
+                <h2 class="saga-title" data-i18n="sagas.ashTitle">🧢 A Saga de Ash Ketchum</h2>
+                <span class="saga-years" data-i18n="sagas.ashYears">1997 – 2023</span>
             </div>
 
             <!-- GERAÇÃO I -->
@@ -306,8 +320,8 @@
                 <div class="gen-header gen-1">
                     <div class="gen-icon">🌿</div>
                     <div class="gen-info">
-                        <h3>Geração I</h3>
-                        <span>Kanto & Ilhas Laranja</span>
+                        <h3 data-i18n="generations.gen1.title">Geração I</h3>
+                        <span data-i18n="generations.gen1.subtitle">Kanto & Ilhas Laranja</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" alt="Bulbasaur">
@@ -370,8 +384,8 @@
                 <div class="gen-header gen-2">
                     <div class="gen-icon">🔥</div>
                     <div class="gen-info">
-                        <h3>Geração II</h3>
-                        <span>Johto</span>
+                        <h3 data-i18n="generations.gen2.title">Geração II</h3>
+                        <span data-i18n="generations.gen2.subtitle">Johto</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/152.png" alt="Chikorita">
@@ -472,8 +486,8 @@
                 <div class="gen-header gen-3">
                     <div class="gen-icon">💧</div>
                     <div class="gen-info">
-                        <h3>Geração III</h3>
-                        <span>Hoenn & Batalha da Fronteira</span>
+                        <h3 data-i18n="generations.gen3.title">Geração III</h3>
+                        <span data-i18n="generations.gen3.subtitle">Hoenn & Batalha da Fronteira</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/252.png" alt="Treecko">
@@ -598,8 +612,8 @@
                 <div class="gen-header gen-4">
                     <div class="gen-icon">✨</div>
                     <div class="gen-info">
-                        <h3>Geração IV</h3>
-                        <span>Sinnoh</span>
+                        <h3 data-i18n="generations.gen4.title">Geração IV</h3>
+                        <span data-i18n="generations.gen4.subtitle">Sinnoh</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/387.png" alt="Turtwig">
@@ -708,8 +722,8 @@
                 <div class="gen-header gen-5">
                     <div class="gen-icon">⚡️</div>
                     <div class="gen-info">
-                        <h3>Geração V</h3>
-                        <span>Unova</span>
+                        <h3 data-i18n="generations.gen5.title">Geração V</h3>
+                        <span data-i18n="generations.gen5.subtitle">Unova</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/495.png" alt="Snivy">
@@ -787,8 +801,8 @@
                 <div class="gen-header gen-6">
                     <div class="gen-icon">🧬</div>
                     <div class="gen-info">
-                        <h3>Geração VI</h3>
-                        <span>Kalos</span>
+                        <h3 data-i18n="generations.gen6.title">Geração VI</h3>
+                        <span data-i18n="generations.gen6.subtitle">Kalos</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/650.png" alt="Chespin">
@@ -910,8 +924,8 @@
                 <div class="gen-header gen-7">
                     <div class="gen-icon">☀️</div>
                     <div class="gen-info">
-                        <h3>Geração VII</h3>
-                        <span>Alola</span>
+                        <h3 data-i18n="generations.gen7.title">Geração VII</h3>
+                        <span data-i18n="generations.gen7.subtitle">Alola</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/722.png" alt="Rowlet">
@@ -949,8 +963,8 @@
                 <div class="gen-header gen-8">
                     <div class="gen-icon">🌍</div>
                     <div class="gen-info">
-                        <h3>Geração VIII</h3>
-                        <span>Jornadas</span>
+                        <h3 data-i18n="generations.gen8.title">Geração VIII</h3>
+                        <span data-i18n="generations.gen8.subtitle">Jornadas</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/810.png" alt="Grookey">
@@ -1019,8 +1033,8 @@
         <!-- SAGA HORIZONTES -->
         <section class="saga-section" data-saga="horizontes">
             <div class="saga-header horizontes">
-                <h2 class="saga-title">🧭 A Saga Horizontes</h2>
-                <span class="saga-years">2023 – Atual</span>
+                <h2 class="saga-title" data-i18n="sagas.horizonsTitle">🧭 A Saga Horizontes</h2>
+                <span class="saga-years" data-i18n="sagas.horizonsYears">2023 – Atual</span>
             </div>
 
             <!-- GERAÇÃO IX -->
@@ -1028,8 +1042,8 @@
                 <div class="gen-header gen-9">
                     <div class="gen-icon">💎</div>
                     <div class="gen-info">
-                        <h3>Geração IX</h3>
-                        <span>Paldea (Liko & Roy)</span>
+                        <h3 data-i18n="generations.gen9.title">Geração IX</h3>
+                        <span data-i18n="generations.gen9.subtitle">Paldea (Liko & Roy)</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/906.png" alt="Sprigatito">
@@ -1074,8 +1088,8 @@
         <!-- SEÇÃO EXTRAS E SPIN-OFFS -->
         <section class="saga-section" data-saga="extras">
             <div class="saga-header" style="background: linear-gradient(135deg, rgba(150, 150, 150, 0.2) 0%, rgba(100, 100, 100, 0.2) 100%);">
-                <h2 class="saga-title">📂 Extras, Spin-offs e Especiais</h2>
-                <span class="saga-years">Conteúdo Adicional</span>
+                <h2 class="saga-title" data-i18n="sagas.extrasTitle">📂 Extras, Spin-offs e Especiais</h2>
+                <span class="saga-years" data-i18n="sagas.extrasYears">Conteúdo Adicional</span>
             </div>
 
             <!-- BASEADOS NOS JOGOS -->
@@ -1083,8 +1097,8 @@
                 <div class="gen-header" style="background: linear-gradient(135deg, #607D8B 0%, #455A64 100%);">
                     <div class="gen-icon">🎮</div>
                     <div class="gen-info">
-                        <h3>Baseados nos Jogos</h3>
-                        <span>Histórias do Lore Pokémon</span>
+                        <h3 data-i18n="generations.games.title">Baseados nos Jogos</h3>
+                        <span data-i18n="generations.games.subtitle">Histórias do Lore Pokémon</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png" alt="Charizard">
@@ -1149,8 +1163,8 @@
                 <div class="gen-header" style="background: linear-gradient(135deg, #81C784 0%, #66BB6A 100%);">
                     <div class="gen-icon">🌻</div>
                     <div class="gen-info">
-                        <h3>Relaxantes e Divertidos</h3>
-                        <span>Conteúdo Leve</span>
+                        <h3 data-i18n="generations.fun.title">Relaxantes e Divertidos</h3>
+                        <span data-i18n="generations.fun.subtitle">Conteúdo Leve</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/143.png" alt="Snorlax">
@@ -1198,8 +1212,8 @@
                 <div class="gen-header" style="background: linear-gradient(135deg, #7E57C2 0%, #5E35B1 100%);">
                     <div class="gen-icon">🌌</div>
                     <div class="gen-info">
-                        <h3>Universo Alternativo</h3>
-                        <span>Filmes Fora da Linha Principal</span>
+                        <h3 data-i18n="generations.alternate.title">Universo Alternativo</h3>
+                        <span data-i18n="generations.alternate.subtitle">Filmes Fora da Linha Principal</span>
                     </div>
                     <div class="gen-pokemon">
                         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
@@ -1253,27 +1267,27 @@
         <div class="footer-pokemon">
             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="Pikachu">
         </div>
-        <p>Gotta Watch 'Em All! 🎬</p>
+        <p data-i18n="ui.footerSlogan">Gotta Watch 'Em All! 🎬</p>
         <div class="footer-credits">
-            <span>Lista organizada por <a href="https://davicjc.com" target="_blank" class="author-link"><strong>Davicjc</strong></a></span>
+            <span><span data-i18n="ui.footerCredits">Lista organizada por</span> <a href="https://davicjc.com" target="_blank" class="author-link"><strong>Davicjc</strong></a></span>
         </div>
         <div class="suggestions-box">
-            <p>📝 <strong>Sugestões são bem-vindas!</strong></p>
-            <p>Achou algo errado ou quer sugerir uma mudança? Entre em contato:</p>
+            <p data-i18n="ui.suggestionsTitle">📝 <strong>Sugestões são bem-vindas!</strong></p>
+            <p data-i18n="ui.suggestionsText">Achou algo errado ou quer sugerir uma mudança? Entre em contato:</p>
             <a href="mailto:davicjc+pokemon@outlook.com" class="email-link">
                 ✉️ davicjc+pokemon@outlook.com
             </a>
         </div>
         <button class="legal-toggle" onclick="this.nextElementSibling.classList.toggle('expanded'); this.classList.toggle('active');">
-            ⚠️ Aviso Legal
+            <span data-i18n="ui.legalToggle">⚠️ Aviso Legal</span>
             <span class="toggle-icon">▼</span>
         </button>
         <div class="legal-disclaimer collapsed">
-            <p>Projeto de fã sem fins lucrativos. Esta ordem representa a visão pessoal do autor.</p>
-            <p>Pokémon™ e seus personagens são propriedade de <strong>Nintendo</strong>, <strong>The Pokémon Company</strong> e <strong>Game Freak</strong>.</p>
-            <p>© 1997-2026 Pokémon. © 1995-2026 Nintendo/Creatures Inc./GAME FREAK inc.</p>
+            <p data-i18n="ui.legalText1">Projeto de fã sem fins lucrativos. Esta ordem representa a visão pessoal do autor.</p>
+            <p data-i18n="ui.legalText2">Pokémon™ e seus personagens são propriedade de <strong>Nintendo</strong>, <strong>The Pokémon Company</strong> e <strong>Game Freak</strong>.</p>
+            <p data-i18n="ui.legalText3">© 1997-2026 Pokémon. © 1995-2026 Nintendo/Creatures Inc./GAME FREAK inc.</p>
         </div>
-        <a href="https://policies.google.com/technologies/partner-sites?hl=pt-BR" target="_blank" class="privacy-link">
+        <a href="https://policies.google.com/technologies/partner-sites?hl=pt-BR" target="_blank" class="privacy-link" data-i18n="ui.privacyLink">
             🔒 Política de Privacidade (Google)
         </a>
     </footer>
