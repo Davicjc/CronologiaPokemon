@@ -24,6 +24,11 @@
 
 ---
 
+
+<p align="center">
+  <img src=".github/readme/preview.png" alt="Prévia de CronologiaPokemon no computador e no celular" width="100%">
+</p>
+
 ## 📖 Sobre o Projeto
 
 Você quer assistir **Pokémon** mas não sabe por onde começar? Com tantas temporadas, filmes e especiais, pode ser confuso saber a ordem correta. Este site resolve esse problema!
