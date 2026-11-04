@@ -135,7 +135,7 @@ Contribuições são sempre bem-vindas! Se você encontrou algum erro ou quer ad
 
 ## 📝 Licença
 
-Este projeto é apenas para fins educacionais e de fãs. **Pokémon** é uma marca registrada da Nintendo, Game Freak e The Pokémon Company.
+O código está sob a licença MIT (veja [LICENSE](LICENSE)). Este projeto é apenas para fins educacionais e de fãs. **Pokémon** é uma marca registrada da Nintendo, Game Freak e The Pokémon Company.
 
 ---
 
